@@ -1,0 +1,36 @@
+name: SonarQube Analysis
+
+on:
+  push:
+    branches:
+      - main  # Run on push to main branch
+  pull_request:
+    types: [opened, synchronize, reopened] # Run on pull requests
+
+jobs:
+  sonar_scan:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Checkout the code (fetch-depth: 0 is recommended for accurate SCM data)
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      # Step 2: Set up your environment (e.g., Java, Node.js, Python)
+      # ...
+
+      # Step 3: Install dependencies and RUN TESTS to GENERATE REPORTS
+      # ... This step is highly language/tool-dependent (see examples below)
+      
+      # Step 4: Run the SonarScanner GitHub Action
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        with:
+          # Optional: Pass additional properties, especially for coverage
+          args: >
+            -Dsonar.projectKey=my-org_my-repo
+            -Dsonar.sources=.
+            # Add specific coverage properties here (see examples below)
